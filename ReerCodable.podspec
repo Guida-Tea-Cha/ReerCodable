@@ -9,16 +9,16 @@
 Pod::Spec.new do |s|
   s.name             = 'ReerCodable'
   s.version          = '1.5.0'
-  s.summary          = 'Codable extensions using Swift Macro1'
+  s.summary          = 'Codable extensions using Swift Macro'
 
   s.description      = <<-DESC
   Enhancing Swift's Codable Protocol Using Macros: A Declarative Approach to Serialization
                        DESC
 
-  s.homepage         = 'https://github.com/reers/ReerCodable'
+  s.homepage         = 'https://github.com/Guida-Tea-Cha/ReerCodable'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Asura19' => 'x.rhythm@qq.com' }
-  s.source           = { :git => 'https://github.com/reers/ReerCodable.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/Guida-Tea-Cha/ReerCodable.git', :tag => s.version.to_s }
 
   s.ios.deployment_target = '13.0'
   s.osx.deployment_target = "10.15"
