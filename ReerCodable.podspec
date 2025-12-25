@@ -33,15 +33,15 @@ Pod::Spec.new do |s|
   s.preserve_paths = ["Package.swift", "Sources/ReerCodableMacros", "Tests"]
   
   s.pod_target_xcconfig = {
-    'OTHER_SWIFT_FLAGS' => '-Xfrontend -load-plugin-executable -Xfrontend $(PODS_BUILD_DIR)/ReerCodable/release/ReerCodableMacros-tool#ReerCodableMacros'
+    'OTHER_SWIFT_FLAGS' => '$(inherited) -Xfrontend -load-plugin-executable -Xfrontend ${PODS_ROOT}/ReerCodable/MacroPlugin/ReerCodableMacros#ReerCodableMacros'
   }
   
   s.user_target_xcconfig = {
-    'OTHER_SWIFT_FLAGS' => '-Xfrontend -load-plugin-executable -Xfrontend $(PODS_BUILD_DIR)/ReerCodable/release/ReerCodableMacros-tool#ReerCodableMacros'
+    'OTHER_SWIFT_FLAGS' => '$(inherited) -Xfrontend -load-plugin-executable -Xfrontend ${PODS_ROOT}/ReerCodable/MacroPlugin/ReerCodableMacros#ReerCodableMacros'
   }
   
   script = <<-SCRIPT
-    env -i PATH="$PATH" "$SHELL" -l -c "swift build -c release --package-path \\"$PODS_TARGET_SRCROOT\\" --build-path \\"${PODS_BUILD_DIR}/ReerCodable\\""
+    env -i PATH="$PATH" "$SHELL" -l -c "swift build -c release --package-path \\"$PODS_TARGET_SRCROOT\\" --build-path \\"${PODS_ROOT}/ReerCodable\\""
   SCRIPT
   
   s.script_phase = {
@@ -49,7 +49,7 @@ Pod::Spec.new do |s|
     :script => script,
     :execution_position => :before_compile,
     :output_files => [
-      '$(PODS_BUILD_DIR)/ReerCodable/release/ReerCodableMacros-tool'
+      '${PODS_ROOT}/ReerCodable/MacroPlugin/ReerCodableMacros#ReerCodableMacros'
     ]
   }
 
