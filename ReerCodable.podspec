@@ -41,6 +41,9 @@ Pod::Spec.new do |s|
   }
   
   script = <<-SCRIPT
+    echo $(PODS_ROOT)
+    echo $(PODS_BUILD_DIR)
+    echo $(BUILD_DIR)
     env -i PATH="$PATH" "$SHELL" -l -c "swift build -c release --package-path \\"$PODS_TARGET_SRCROOT\\" --build-path \\"${PODS_ROOT}/ReerCodable\\""
   SCRIPT
   
