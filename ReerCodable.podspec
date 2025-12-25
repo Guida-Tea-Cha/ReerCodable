@@ -9,7 +9,7 @@
 Pod::Spec.new do |s|
   s.name             = 'ReerCodable'
   s.version          = '1.5.0'
-  s.summary          = 'Codable extensions using Swift Macro'
+  s.summary          = 'Codable extensions using Swift Macro1'
 
   s.description      = <<-DESC
   Enhancing Swift's Codable Protocol Using Macros: A Declarative Approach to Serialization
