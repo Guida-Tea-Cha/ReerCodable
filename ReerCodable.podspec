@@ -15,10 +15,10 @@ Pod::Spec.new do |s|
   Enhancing Swift's Codable Protocol Using Macros: A Declarative Approach to Serialization
                        DESC
 
-  s.homepage         = 'https://github.com/Guida-Tea-Cha/ReerCodable'
+  s.homepage         = 'https://github.com/reers/ReerCodable'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Asura19' => 'x.rhythm@qq.com' }
-  s.source           = { :git => 'https://github.com/Guida-Tea-Cha/ReerCodable.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/reers/ReerCodable.git', :tag => s.version.to_s }
 
   s.ios.deployment_target = '13.0'
   s.osx.deployment_target = "10.15"
@@ -33,18 +33,15 @@ Pod::Spec.new do |s|
   s.preserve_paths = ["Package.swift", "Sources/ReerCodableMacros", "Tests"]
   
   s.pod_target_xcconfig = {
-    'OTHER_SWIFT_FLAGS' => '-Xfrontend -load-plugin-executable -Xfrontend $(PODS_ROOT)/ReerCodable/release/ReerCodableMacros-tool#ReerCodableMacros'
+    'OTHER_SWIFT_FLAGS' => '-Xfrontend -load-plugin-executable -Xfrontend ${PODS_BUILD_DIR}/ReerCodable/release/ReerCodableMacros-tool#ReerCodableMacros'
   }
   
   s.user_target_xcconfig = {
-    'OTHER_SWIFT_FLAGS' => '-Xfrontend -load-plugin-executable -Xfrontend $(PODS_ROOT)/ReerCodable/release/ReerCodableMacros-tool#ReerCodableMacros'
+    'OTHER_SWIFT_FLAGS' => '-Xfrontend -load-plugin-executable -Xfrontend ${PODS_BUILD_DIR}/ReerCodable/release/ReerCodableMacros-tool#ReerCodableMacros'
   }
   
   script = <<-SCRIPT
-    echo $(PODS_ROOT)
-    echo $(PODS_BUILD_DIR)
-    echo $(BUILD_DIR)
-    env -i PATH="$PATH" "$SHELL" -l -c "swift build -c release --package-path \\"$PODS_TARGET_SRCROOT\\" --build-path \\"${PODS_ROOT}/ReerCodable\\""
+    env -i PATH="$PATH" "$SHELL" -l -c "swift build -c release --package-path \\"$PODS_TARGET_SRCROOT\\" --build-path \\"${PODS_BUILD_DIR}/ReerCodable\\""
   SCRIPT
   
   s.script_phase = {
@@ -52,7 +49,7 @@ Pod::Spec.new do |s|
     :script => script,
     :execution_position => :before_compile,
     :output_files => [
-      '$(PODS_ROOT)/ReerCodable/release/ReerCodableMacros-tool'
+      '${PODS_BUILD_DIR}/ReerCodable/release/ReerCodableMacros-tool'
     ]
   }
 
