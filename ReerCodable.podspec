@@ -32,7 +32,6 @@ Pod::Spec.new do |s|
   cache_root_rel   = "Library/Caches/ReerCodableMacros/#{s.version}"
   plugin_rel_path  = "#{cache_root_rel}/release/ReerCodableMacros-tool"
 
-
   s.prepare_command = <<-CMD
     set -e
 
@@ -61,11 +60,9 @@ Pod::Spec.new do |s|
   CMD
   
   plugin_flag = "-Xfrontend -load-plugin-executable -Xfrontend $(HOME)/#{plugin_rel_path}#ReerCodableMacros"
-
   s.pod_target_xcconfig = {
     'OTHER_SWIFT_FLAGS' => plugin_flag
   }
-
   s.user_target_xcconfig = {
     'OTHER_SWIFT_FLAGS' => plugin_flag
   }
