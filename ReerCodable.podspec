@@ -25,14 +25,42 @@ Pod::Spec.new do |s|
   s.watchos.deployment_target = "6.0"
   s.tvos.deployment_target = "13.0"
   s.visionos.deployment_target = "1.0"
-  
   s.swift_versions = '5.10'
-
   s.source_files = 'Sources/ReerCodable/**/*'
-  
   s.preserve_paths = ["Package.swift", "Sources/ReerCodableMacros", "Tests"]
+
+  cache_root_rel   = "Library/Caches/ReerCodableMacros/#{s.version}"
+  plugin_rel_path  = "#{cache_root_rel}/release/ReerCodableMacros-tool"
+
+
+  s.prepare_command = <<-CMD
+    set -e
+
+    echo "[ReerCodable] Preparing macro plugin (swift build)..."
+
+    BUILD_ROOT="$HOME/#{cache_root_rel}"
+    TOOL_PATH="$BUILD_ROOT/release/ReerCodableMacros-tool"
+
+    if [ -f "$TOOL_PATH" ]; then
+      echo "[ReerCodable] Existing macro plugin found at $TOOL_PATH, skip swift build."
+      exit 0
+    fi
+
+    echo "[ReerCodable] Building macro plugin into $BUILD_ROOT ..."
+    mkdir -p "$BUILD_ROOT"
+
+    swift build -c release --package-path "$PWD" --build-path "$BUILD_ROOT"
+
+    if [ -f "$TOOL_PATH" ]; then
+      echo "[ReerCodable] Macro plugin built at $TOOL_PATH"
+    else
+      echo "[ReerCodable] ERROR: Macro plugin not found at $TOOL_PATH after build." >&2
+      exit 1
+    fi
+
+  CMD
   
-  plugin_flag = '-Xfrontend -load-plugin-executable -Xfrontend $(PODS_BUILD_DIR)/ReerCodable/debug/ReerCodableMacros-tool#ReerCodableMacros'
+  plugin_flag = "-Xfrontend -load-plugin-executable -Xfrontend $(HOME)/#{plugin_rel_path}#ReerCodableMacros"
 
   s.pod_target_xcconfig = {
     'OTHER_SWIFT_FLAGS' => plugin_flag
@@ -40,24 +68,5 @@ Pod::Spec.new do |s|
 
   s.user_target_xcconfig = {
     'OTHER_SWIFT_FLAGS' => plugin_flag
-  }
-  
-  script = <<-SCRIPT
-    BUILD_DIR="${PODS_BUILD_DIR}/ReerCodable"
-    TOOL_DIR="${BUILD_DIR}/debug"
-    TOOL_PATH="${TOOL_DIR}/ReerCodableMacros-tool"
-    mkdir -p "$TOOL_DIR"
-    echo "[ReerCodable] Building macro plugin with swift build 
-    env -i PATH="$PATH" "$SHELL" -l -c "swift build -c release --package-path \"$PODS_TARGET_SRCROOT\" --build-path \"$BUILD_DIR\""
-    echo "[ReerCodable] Macro plugin built at $TOOL_PATH"
-  SCRIPT
-  
-  s.script_phase = {
-    :name => 'Build ReerCodable macro plugin',
-    :script => script,
-    :execution_position => :before_compile,
-    :output_files => [
-      '${PODS_BUILD_DIR}/ReerCodable/release/ReerCodableMacros-tool'
-    ]
   }
 end
